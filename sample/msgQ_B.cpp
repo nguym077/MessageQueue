@@ -74,6 +74,10 @@ int main() {
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 	cout << getpid() << ": now exits" << endl;
 
+	// mtype = -112 is looking for message <= abs(-112)
+	// mytpe = 0 means get oldest message (FIFO)
+	// -> used to empty out queue (clean out)
+	//
 	// within a given mtype -> FIFO (greetings with same mtype)
 	msgrcv (qid, (struct msgbuf *)&msg, size, -112, 0);
 	msgrcv (qid, (struct msgbuf *)&msg, size, 0, 0);
