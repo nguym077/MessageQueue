@@ -14,40 +14,93 @@
 #include <cstdlib>
 using namespace std;
 
-int main() {
-     int qid = msgget(ftok(".",'u'), 0);
+// "struct" needs to be identical to the other file (B)
+// (msg objects in the queue are byte aligned)
+//
+// declare my message buffer
+struct buf {
+	long mtype; // required
+	char greeting[50]; // mesg content
+};
 
-     struct buf {
-		long mtype;
-		char greeting[50];
-	};
-	
-     buf msg;
+int main() {
+
+	// "msgget" : not allocating, just need to find an existing queue (0)
+	// 			assume queue exists! make sure other program starts first
+	// "ftok" : needs to be same identifier as in other program 
+	//			(parameters need to match for A & B, also same directory)
+	int qid = -1;
+	char tempMsg[50];
+	buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
-     // (1)
-     strcpy(msg.greeting, "Hello first receiever");	
-	cout << getpid() << ": sends message to first receiver" << endl;
-	msg.mtype = 117; 
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+	//Random 32 bit Int Generator
+	random_device randGen;
+	long randEvent = -1;
 
-     // (1) acknowledgement 
-     msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
-	cout << getpid() << ": " << msg.greeting << endl;
+	while(msgget(ftok(".",'u'), 0)>=0){
 
-     // (2)
-     strcpy(msg.greeting, "Hello second receiver");	
-	cout << getpid() << ": sends message to second receiver" << endl;
-	msg.mtype = 217; 	
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+		qid = msgget(ftok(".",'u'), 0);
 
-     // (2) acknowledgement
-     msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
-	cout << getpid() << ": " << msg.greeting << endl;
+		
+	
+		//Generate Randome Value
+		randEvent = randGen();
+		
+		//Check if random event is less than 100
+		if(randEvent < 100){
+			//Sender 997 Terminates
+			cout << getpid() << ": now exits" << endl;
+			exit(0);
+		}
 
-     // deletes message queue
-     // (make sure queue is empty!)
+		//Set message type mtype = 997
+		msg.mtype = 997;
+
+		//Check For Qualifying Random Event
+		if(randEvent % msg.mtype == 0 ){
+
+			// "gitpid()" : pid of the A program (pid is program id assigned by system)
+			// prepare my message to send
+			strcpy(msg.greeting, randEvent);
+			strcpy(tempMsg, randEvent);
+
+			cout << getpid() << ": sends greeting" << endl;
+			
+			//Set message type mtype = 251
+			msg.mtype = 251;
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0); // sending
+
+
+			//Set message type mtype = 257
+			msg.mtype = 257;
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0); // sending
+
+			// "msgrcv" : "997" 2 acknowledgement messages needed from msgQ
+			int ackNum = 0;
+			while(ackNum < 2){
+
+				if(msgrcv(qid, (struct msgbuf *)&msg, size, 997, 0) == 0){ // reading
+
+					cout << getpid() << ": gets acknowledgment << endl;
+					cout << "reply: " << msg.greeting << endl;
+					ackNum++;
+				}
+			}
+
+			cout << getpid() << ": continues..." << endl;
+
+		}
+		
+	}
+
+
+	// deletes message queue
+	// (make sure queue is empty!)
 	msgctl(qid, IPC_RMID, NULL);
 
-     exit(0);
+	//Sender 997 Terminates
+	cout << getpid() << ": now exits" << endl;
+	exit(0);
+
 }
