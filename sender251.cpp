@@ -45,12 +45,18 @@ int main() {
 	cout << "SENDER 251" << endl;
 
 	// (3)
-     strcpy(msg.greeting, "Hello first receiever from sender 251.");
+     strcpy(msg.greeting, "Hello first receiver from sender 251.");
 	cout << getpid() << ": sends message to first receiver" << endl;
 	msg.mtype = 300; 
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-     //Sender 251 Terminates
+     
+	// sends last message r2
+	strcpy(msg.greeting, "Terminate (sender 251 to receiver1)");
+	msg.mtype = 300; 
+	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+
+	//Sender 251 Terminates
 	cout << getpid() << ": now exits" << endl;
 	exit(0);
 }

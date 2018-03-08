@@ -26,11 +26,22 @@ int main() {
 
 	cout << "SENDER 257" << endl;
 
-	// (4)
-     strcpy(msg.greeting, "Hello second receiever from sender257.");
-	cout << getpid() << ": sends message to second receiver" << endl;
-	msg.mtype = 400; 
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+	bool 257Status = true;
+
+	while (257Status) {
+		// retrieves terminating message if there is one
+		msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
+		
+		if (msg.greeting[0] == 'T') {
+			257Status = false;
+		} else {
+			// (4)
+			strcpy(msg.greeting, "Hello second receiever from sender257.");
+			cout << getpid() << ": sends message to second receiver" << endl;
+			msg.mtype = 400; 
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+		}
+	}
 
 	//Sender 257 Terminates
 	cout << getpid() << ": now exits" << endl;
