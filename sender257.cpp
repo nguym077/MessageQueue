@@ -26,14 +26,14 @@ int main() {
 
 	cout << "SENDER 257" << endl;
 
-	bool 257Status = true;
+	bool status257 = true;
 
-	while (257Status) {
+	while (status257) {
 		// retrieves terminating message if there is one
 		msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
-		
+
 		if (msg.greeting[0] == 'T') {
-			257Status = false;
+			status257 = false;
 		} else {
 			// (4)
 			strcpy(msg.greeting, "Hello second receiever from sender257.");

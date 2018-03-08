@@ -59,12 +59,12 @@ int main() {
 		randomNumber = rand();
 	}
 
-	// sends last message r
+	// sends last message to r1
 	strcpy(msg.greeting, "Terminate (sender 997 to receiver1)");
 	msg.mtype = 100; 
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-	// sends last message r2
+	// sends last message to r2
 	strcpy(msg.greeting, "Terminate (sender 997 to receiver2)");
 	msg.mtype = 200; 
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);

@@ -25,18 +25,18 @@ int main() {
 
      cout << "RECEIVER 1" << endl;
 
-     bool 997Status = true;
-     bool 251Status = true;
+     bool status997 = true;
+     bool status251 = true;
 
-     while (997Status && 251Status) {
-          if (997Status) {
+     while (status997 && status251) {
+          if (status997) {
                // (1)
                msgrcv(qid, (struct msgbuf *)&msg, size, 100, 0);
                cout << getpid() << ": Message received from sender 997." << endl;
                cout << "message: " << msg.greeting << endl;
 
                if (msg.greeting[0] == 'T') {
-                    997Status = false;
+                    status997 = false;
                } else {
                     msg.mtype = 110;
                     strcpy(msg.greeting, "Message delivered to first receiver successfuly.");
@@ -44,14 +44,14 @@ int main() {
                }
           }
 
-          if (251Status) {
+          if (status251) {
                // (3)
                msgrcv(qid, (struct msgbuf *)&msg, size, 300, 0);
                cout << getpid() << ": Message received from sender 251." << endl;
                cout << "message: " << msg.greeting << endl;
 
                if (msg.greeting[0] = 'T') {
-                    251Status = false;
+                    status251 = false;
                }
           }
      }

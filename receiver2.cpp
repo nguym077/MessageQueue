@@ -26,10 +26,10 @@ int main() {
 
 	cout << "RECEIVER 2" << endl;
 
-	bool 997Status = true;
+	bool status997 = true;
 	//bool 257Status = true;
 	while (msgCount < 5000) {
-		if (997Status) {
+		if (status997) {
 			// (2)
 			msgrcv(qid, (struct msgbuf *)&msg, size, 200, 0);
 			cout << getpid() << ": Message receieved from sender 997" << endl;
@@ -37,7 +37,7 @@ int main() {
 			msgCount++;
 
 			if (msg.greeting[0] == 'T') {
-				997Status = false;
+				status997 = false;
 			} else {
 				msg.mtype = 210;
 				strcpy(msg.greeting, "Message delivered to second receiver successfuly.");
