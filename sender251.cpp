@@ -26,64 +26,31 @@ single executable. Then, execute your program as usual.
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <time.h>
-#include <random>
 #include <cstdlib>
 using namespace std;
 
-
-// "struct" needs to be identical to the other file (B)
-// (msg objects in the queue are byte aligned)
-//
-// declare my message buffer
-struct buf {
-	long mtype; // required
-	char greeting[50]; // mesg content
-};
-
 int main() {
+	// finds existing queue
+     int qid = msgget(ftok(".",'u'), 0);
+
+	// declare message buffer
+     struct buf {
+		long mtype;
+		char greeting[50];
+	};
 	
-	// "msgget" : not allocating, just need to find an existing queue (0)
-	// 			assume queue exists! make sure other program starts first
-	// "ftok" : needs to be same identifier as in other program 
-	//			(parameters need to match for A & B, also same directory)
-	int qid = -1;
-	char tempMsg[50];
-	buf msg;
+     buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
-	//Random 32 bit Int Generator
-	random_device randGen;
-	long randEvent = -1;
+	cout << "SENDER 251" << endl;
 
-	while(msgget(ftok(".",'u'), 0)>=0){
+	// (3)
+     strcpy(msg.greeting, "Hello first receiever from sender 251.");
+	cout << getpid() << ": sends message to first receiver" << endl;
+	msg.mtype = 300; 
+	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-		qid = msgget(ftok(".",'u'), 0);
-
-		
-	
-		//Generate Randome Value
-		randEvent = randGen();
-
-		//Set message type mtype = 251
-		msg.mtype = 251;
-
-		//Check For Qualifying Random Event
-		if(randEvent % msg.mtype == 0){
-
-			// "gitpid()" : pid of the A program (pid is program id assigned by system)
-			// prepare my message to send
-			strcpy(msg.greeting, randEvent);
-			strcpy(tempMsg, randEvent);
-
-			cout << getpid() << ": sends greeting" << endl;
-			msgsnd(qid, (struct msgbuf *)&msg, size, 0); // sending
-
-		}
-		
-	}
-	
-
-	//Sender 251 Terminates
+     //Sender 251 Terminates
 	cout << getpid() << ": now exits" << endl;
 	exit(0);
 }

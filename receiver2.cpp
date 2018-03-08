@@ -13,6 +13,7 @@
 using namespace std;
 
 int main() {
+	int msgCount = 0;
      int qid = msgget(ftok(".", 'u'), IPC_EXCL|IPC_CREAT|0600);
 
      struct buf {
@@ -23,14 +24,25 @@ int main() {
      buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
+	cout << "RECEIVER 2" << endl;
+
      // (2)
-     msgrcv(qid, (struct msgbuf *)&msg, size, 217, 0);
-	cout << getpid() << ": Message receieved from sender 997 (2)" << endl;
+     msgrcv(qid, (struct msgbuf *)&msg, size, 200, 0);
+	cout << getpid() << ": Message receieved from sender 997" << endl;
 	cout << "message: " << msg.greeting << endl;
+	msgCount++;
 
      msg.mtype = 210;
-	strcpy(msg.greeting, "Message sent to second receiver successfuly.");
+	strcpy(msg.greeting, "Message delivered to second receiver successfuly.");
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
+	// (4)
+     msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
+	cout << getpid() << ": Message receieved from sender 257" << endl;
+	cout << "message: " << msg.greeting << endl;
+	msgCount++;
+
+	// receiver 2 terminates
+	cout << getpid() << ": now exits" << endl;
      exit(0);
 }
