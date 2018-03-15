@@ -15,8 +15,8 @@ single executable. Then, execute your program as usual.
 // The sender 251 source code needs to include get_info.h file
 // and calls the function get_info exactly once (not in a loop),
 // anywhere after the msgget function in sender 251 code. 
-// #include "get_info.h"
 
+#include "get_info.h"
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -27,6 +27,7 @@ single executable. Then, execute your program as usual.
 #include <stdlib.h>
 #include <time.h>
 #include <cstdlib>
+#include <limits.h>
 using namespace std;
 
 int main() {
@@ -42,19 +43,28 @@ int main() {
      buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
-	cout << "SENDER 251" << endl;
-
-	// (3)
-     strcpy(msg.greeting, "Hello first receiver from sender 251.");
-	cout << getpid() << ": sends message to first receiver" << endl;
-	msg.mtype = 300; 
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-
-     
-	// sends last message r2
+	// last message to r1 through patch
 	strcpy(msg.greeting, "Terminate (sender 251 to receiver1)");
 	msg.mtype = 300; 
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+	get_info(qid, (struct msgbuf *)&msg, size, 300);
+
+	srand(time(NULL));
+	int randomEvent;
+
+	cout << "SENDER 251" << endl;
+	while (true) {
+		// grabs value of random event for message
+		do {
+			randomEvent = INT_MAX * rand();
+		} while (randomEvent % 251 != 0);
+
+		// (3)
+		strcpy(msg.greeting, "Hello first receiver from sender 251. Value: ");
+		// strcat(msg.greeting, randomEvent);
+		cout << getpid() << ": sends message to first receiver" << endl;
+		msg.mtype = 300; 
+		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+	}
 
 	//Sender 251 Terminates
 	cout << getpid() << ": now exits" << endl;

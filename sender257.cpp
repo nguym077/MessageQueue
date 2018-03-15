@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include <limits.h>
 using namespace std;
 
 int main() {
@@ -24,11 +25,17 @@ int main() {
      buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
+	srand(time(NULL));
+	int randomEvent;
+
 	cout << "SENDER 257" << endl;
-
 	bool status257 = true;
-
 	while (status257) {
+		// grabs value of random event for message
+		do {
+			randomEvent = INT_MAX * rand();
+		} while (randomEvent % 257 != 0);
+
 		// retrieves terminating message if there is one
 		msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
 
@@ -36,7 +43,8 @@ int main() {
 			status257 = false;
 		} else {
 			// (4)
-			strcpy(msg.greeting, "Hello second receiever from sender257.");
+			strcpy(msg.greeting, "Hello second receiever from sender257. Value: ");
+			// strcat(msg.greeting, randomEvent);
 			cout << getpid() << ": sends message to second receiver" << endl;
 			msg.mtype = 400; 
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);

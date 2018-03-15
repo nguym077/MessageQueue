@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include <limits.h>
 using namespace std;
 
 
@@ -32,10 +33,15 @@ int main() {
 	buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
-	cout << "SENDER 997" << endl;
+	srand(time(NULL));
+	int randomEvent;
 
-	int randomNumber = rand();
-	while (randomNumber >= 100) {
+	do {
+		randomEvent  = INT_MAX * rand();
+	} while(randomEvent % 997 != 0 || randomEvent < 100);
+
+	cout << "SENDER 997" << endl;
+	while (randomEvent >= 100) {
 		// (1)
 		strcpy(msg.greeting, "Hello first receiever from sender 997.");
 		cout << getpid() << ": sends message to first receiver" << endl;
@@ -56,7 +62,9 @@ int main() {
 		msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
 		cout << getpid() << ": " << msg.greeting << endl;
 
-		randomNumber = rand();
+		do {
+			randomEvent  = INT_MAX * rand();
+		} while(randomEvent % 997 != 0 || randomEvent < 100);
 	}
 
 	// sends last message to r1

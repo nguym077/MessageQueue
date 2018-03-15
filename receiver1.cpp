@@ -28,7 +28,7 @@ int main() {
      bool status997 = true;
      bool status251 = true;
 
-     while (status997 && status251) {
+     while (status997 || status251) {
           if (status997) {
                // (1)
                msgrcv(qid, (struct msgbuf *)&msg, size, 100, 0);
