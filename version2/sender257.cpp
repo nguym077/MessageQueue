@@ -39,12 +39,12 @@ int main() {
 		
 		randomNumber = rand()%randMax;
 		// retrieves terminating message if there is one
-		msgrcv(qid, (struct msgbuf *)&msg, size, 259, 0);
-
-		if (msg.greeting[0] == 'T') {
-			status257 = false;
-		} 
-		else if(randomNumer%257 == 0) {
+                if(msgrcv(qid, (struct msgbuf *)&msg, size, 259, 0)==0){
+                    if (msg.greeting[0] == 'T') {
+                            status257 = false;
+                    }
+                }
+                else if(randomNumber%257 == 0) {
 			strcpy(msg.greeting, "Hello second receiever from sender257.");
 			cout << getpid() << ": sends message to second receiver" << endl;
 			msg.mtype = 257; 

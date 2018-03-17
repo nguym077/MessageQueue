@@ -72,7 +72,7 @@ int main() {
 				strcpy(msg.greeting, "Terminate (sender 997 to receiver1)");
 				msg.mtype = 997; 
 				msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-				status997 = false
+                                status997 = false;
 			}
 		}
 		

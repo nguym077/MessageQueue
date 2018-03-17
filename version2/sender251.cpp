@@ -17,6 +17,7 @@ single executable. Then, execute your program as usual.
 // anywhere after the msgget function in sender 251 code. 
 // #include "get_info.h"
 
+#include "get_info.h"
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -45,7 +46,7 @@ int main() {
     buf msg;
 	int size = sizeof(msg)-sizeof(long);
 	
-	get_info(qid, (struct msgbuf *)&msg, size, 0);
+        get_info(qid, (struct msgbuf*)&msg, size, 0);
 	
 	unsigned long randMax = 4294967295;
 	unsigned long randomNumber = rand()%randMax;
@@ -55,7 +56,7 @@ int main() {
 	while(sender251){
 		// (3)
 		randomNumber = rand()%randMax;
-		if(randomNumber%251 == 0){
+                if((randomNumber%251) == 0){
 			strcpy(msg.greeting, "Hello first receiver from sender 251.");
 			cout << getpid() << ": sends message to first receiver" << endl;
 			msg.mtype = 300; 

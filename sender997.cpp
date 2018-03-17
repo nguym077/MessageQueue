@@ -21,13 +21,13 @@ int main() {
 	// initialize random
 	srand(time(NULL));
 
-	// finds existing queue
-	int qid = msgget(ftok(".",'u'), 0);
+	// initialize message queue
+	int qid = msgget(ftok(".", 'u'), IPC_EXCL|IPC_CREAT|0600);
 
 	// declare my message buffer
 	struct buf {
 		long mtype; // required
-		char greeting[50]; // mesg content
+		char greeting[50]; // msg content
 	};
 
 	buf msg;
@@ -36,46 +36,56 @@ int main() {
 	srand(time(NULL));
 	int randomEvent;
 
-	do {
-		randomEvent  = INT_MAX * rand();
-	} while(randomEvent % 997 != 0 || randomEvent < 100);
+	cout << "SENDER 997: " << getpid() << endl;
 
-	cout << "SENDER 997" << endl;
-	while (randomEvent >= 100) {
-		// (1)
-		strcpy(msg.greeting, "Hello first receiever from sender 997.");
-		cout << getpid() << ": sends message to first receiver" << endl;
-		msg.mtype = 100; 
-		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+	bool selfTerminate = false;		// used for terminating condition of < 100
+	bool statusReceiver2 = true;
 
-		// (1) acknowledgement 
-		msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
-		cout << getpid() << ": " << msg.greeting << endl;
+	randomEvent  = INT_MAX * rand();
+	while (randomEvent % 997 == 0 && selfTerminate = false) {
+		if (randomEvent < 100) {
+			selfTerminate = true
+		} else {
+			// (1) -- sends message to receiver1
+			strcpy(msg.greeting, "Hello first receiver from sender 997.");
+			msg.mtype = 100;
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-		// (2)
-		strcpy(msg.greeting, "Hello second receiver from sender 997.");	
-		cout << getpid() << ": sends message to second receiver" << endl;
-		msg.mtype = 200; 	
-		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+			// (1) acknowledgement
+			msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
+			cout << getpid() << ": " << msg.greeting << endl;
 
-		// (2) acknowledgement
-		msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
-		cout << getpid() << ": " << msg.greeting << endl;
+			if (statusReceiver2) {
+				// (2)
+				strcpy(msg.greeting, "Hello second receiver from sender 997.");
+				msg.mtype = 200;
+				msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-		do {
+				// (2) acknowledgement
+				msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
+				cout << getpid() << ": " << msg.greeting << endl;
+
+				if (msg.greeting[0] == 'T') {
+					// receiver2 was terminated
+					statusReceiver2 = false;
+				}
+			}
+
 			randomEvent  = INT_MAX * rand();
-		} while(randomEvent % 997 != 0 || randomEvent < 100);
+		}
 	}
 
-	// sends last message to r1
-	strcpy(msg.greeting, "Terminate (sender 997 to receiver1)");
-	msg.mtype = 100; 
+	// sends reciever1 last message
+	msg.mtype = 100;
+	strcpy(msg.greeting, "Terminated (receiver 1)");
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-	// sends last message to r2
-	strcpy(msg.greeting, "Terminate (sender 997 to receiver2)");
-	msg.mtype = 200; 
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+	// cannot delete/terminate queue unless all others are terminated
+	// waits for terminating message from each channel
+	msgrcv(qid, (struct msgbuf *)&msg, size, 700, 0);		// (10)
+	msgrcv(qid, (struct msgbuf *)&msg, size, 701, 0);		// (11)
+	msgrcv(qid, (struct msgbuf *)&msg, size, 702, 0);		// (12)
+	msgrcv(qid, (struct msgbuf *)&msg, size, 703, 0);		// (13)
 
      // deletes message queue
      // (make sure queue is empty!)

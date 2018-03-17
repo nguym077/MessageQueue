@@ -14,46 +14,54 @@ using namespace std;
 
 int main() {
 	int msgCount = 0;
-     int qid = msgget(ftok(".", 'u'), IPC_EXCL|IPC_CREAT|0600);
+    int qid = msgget(ftok(".",'u'), 0);
 
-     struct buf {
+    struct buf {
 		long mtype;
 		char greeting[50];
 	};
-	
-     buf msg;
+
+    buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
-	cout << "RECEIVER 2" << endl;
+	cout << "RECEIVER 2" << getpid() << endl;
 
-	bool status997 = true;
-	//bool 257Status = true;
 	while (msgCount < 5000) {
-		if (status997) {
-			// (2)
-			msgrcv(qid, (struct msgbuf *)&msg, size, 200, 0);
-			cout << getpid() << ": Message receieved from sender 997" << endl;
-			cout << "message: " << msg.greeting << endl;
-			msgCount++;
+		// (2)
+		msgrcv(qid, (struct msgbuf *)&msg, size, 200, 0);
+		cout << getpid() << ": Message receieved from sender 997" << endl;
+		cout << "message: " << msg.greeting << endl;
+		msgCount++;
 
-			if (msg.greeting[0] == 'T') {
-				status997 = false;
-			} else {
-				msg.mtype = 210;
-				strcpy(msg.greeting, "Message delivered to second receiver successfuly.");
-				msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-			}
-		}
+		// (2) acknowledgement
+		msg.mtype = 210;
+		strcpy(msg.greeting, "Message delivered to second receiver successfuly.");
+		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
 		// (4)
 		msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
 		cout << getpid() << ": Message received from sender 257" << endl;
 		cout << "message: " << msg.greeting << endl;
 		msgCount++;
+
+		// dummy message
+		msg.mtype = 410;
+		strcpy(msg.greeting, "Dummy Mesage to Sender 257");
+		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 	}
 
+	// sends sender 997 last message
+	msg.mtype = 210;
+	strcpy(msg.greeting, "Terminated (Receiver 2)");
+	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+
 	// sends sender 257 last message
-	msg.mtype = 400;
+	msg.mtype = 410;
+	strcpy(msg.greeting, "Terminated (Receiver 2)");
+	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+
+	// sends sender 997 terminating message (11)
+	msg.mtype = 701;
 	strcpy(msg.greeting, "Terminated (Receiver 2)");
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
