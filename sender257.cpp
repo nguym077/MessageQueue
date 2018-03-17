@@ -46,7 +46,11 @@ int main() {
         msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
 		// retrieves terminating message if there is one
+<<<<<<< HEAD
+		// msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
+=======
 		msgrcv(qid, (struct msgbuf *)&msg, size, 410, 0);
+>>>>>>> dfb8f3603702f41cbdb66e27dc38e335d4b6a6ca
 
 		if (msg.greeting[0] == 'T') {
 			statusReceiver2 = false;
