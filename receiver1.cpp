@@ -26,6 +26,7 @@ int main() {
      cout << "RECEIVER 1" << getpid() << endl;
 
      bool bothSending = true;
+     int count = 0;
 
      while (bothSending) {
          // receives message from 251 or 997

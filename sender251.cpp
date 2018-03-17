@@ -59,7 +59,7 @@ int main() {
 		} while (randomEvent % 251 != 0);
 
 		// (3)
-        msg.mtype = 100;
+          msg.mtype = 100;
 		strcpy(msg.greeting, "251 to first receiver. Value: ");
 		// strcat(msg.greeting, randomEvent);
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
