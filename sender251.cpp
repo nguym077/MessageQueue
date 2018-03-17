@@ -44,8 +44,8 @@ int main() {
 	int size = sizeof(msg)-sizeof(long);
 
 	// last message to r1 through patch
+    msg.mtype = 100;
 	strcpy(msg.greeting, "Terminate (sender 251 to receiver1)");
-	msg.mtype = 300;
 	get_info(qid, (struct msgbuf *)&msg, size, 300);
 
 	srand(time(NULL));
@@ -59,10 +59,9 @@ int main() {
 		} while (randomEvent % 251 != 0);
 
 		// (3)
-		strcpy(msg.greeting, "Hello first receiver from sender 251. Value: ");
+        msg.mtype = 100;
+		strcpy(msg.greeting, "251 to first receiver. Value: ");
 		// strcat(msg.greeting, randomEvent);
-		cout << getpid() << ": sends message to first receiver" << endl;
-		msg.mtype = 300;
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 	}
 

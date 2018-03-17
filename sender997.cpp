@@ -15,8 +15,6 @@
 #include <limits.h>
 using namespace std;
 
-
-
 int main() {
 	// initialize random
 	srand(time(NULL));
@@ -47,8 +45,8 @@ int main() {
 			selfTerminate = true
 		} else {
 			// (1) -- sends message to receiver1
-			strcpy(msg.greeting, "Hello first receiver from sender 997.");
 			msg.mtype = 100;
+			strcpy(msg.greeting, "997 to first receiver. Value: ");
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
 			// (1) acknowledgement
@@ -57,8 +55,8 @@ int main() {
 
 			if (statusReceiver2) {
 				// (2)
-				strcpy(msg.greeting, "Hello second receiver from sender 997.");
 				msg.mtype = 200;
+				strcpy(msg.greeting, "997 to second receiver.");
 				msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
 				// (2) acknowledgement

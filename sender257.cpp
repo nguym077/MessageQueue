@@ -39,10 +39,10 @@ int main() {
 		} while (randomEvent % 257 != 0);
 
         // (4)
-        strcpy(msg.greeting, "Hello second receiver from sender257. Value: ");
+        strcpy(msg.greeting, "257 to second receiver. Value: ");
         // strcat(msg.greeting, randomEvent);
         cout << getpid() << ": sends message to second receiver" << endl;
-        msg.mtype = 400;
+        msg.mtype = 200;
         msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
 		// retrieves terminating message if there is one
@@ -55,7 +55,7 @@ int main() {
 
     // sends sender 997 terminating message (13)
 	msg.mtype = 703;
-	strcpy(msg.greeting, "Terminated (Receiver 2)");
+	strcpy(msg.greeting, "Terminated (Sender 257)");
 	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
 	//Sender 257 Terminates

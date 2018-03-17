@@ -25,34 +25,27 @@ int main() {
 
      cout << "RECEIVER 1" << getpid() << endl;
 
-     bool status997 = true;
-     bool status251 = true;
+     bool bothSending = true;
 
-     while (status997 || status251) {
-          if (status997) {
-               // (1)
-               msgrcv(qid, (struct msgbuf *)&msg, size, 100, 0);
+     while (bothSending) {
+         // receives message from 251 or 997
+         msgrcv(qid, (struct msgbuf *)&msg, size, 100, 0);
 
-               if (msg.greeting[0] == 'T') {
-                   status997 = false;
-               } else {
-                   // (1) acknowledgement
-                   msg.mtype = 110;
-                   strcpy(msg.greeting, "Message delivered to first receiver successfuly.");
-                   msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-               }
-          }
+         if (msg.greeting[0] == '9') {
+             // message came from 997, need to send acknowledgement
+             msg.mtype = 110;
+             strcpy(msg.greeting, "Message delivered to first receiver successfuly.");
+             msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+         } else if (msg.greeting[0] == 'T') {
+            // terminating message received from either 251 or 997
+            // if both are received, receiver1 terminates
+             count++;
 
-          if (status251) {
-               // (3)
-               msgrcv(qid, (struct msgbuf *)&msg, size, 300, 0);
-
-               if (msg.greeting[0] = 'T') {
-                    status251 = false;
-               }
-          }
+             if (count == 2) {
+                 bothSending = false;
+             }
+         }
      }
-
 
      // sends sender 997 terminating message (10)
  	msg.mtype = 700;
