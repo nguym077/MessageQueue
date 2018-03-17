@@ -42,7 +42,7 @@ int main() {
 	// grabs random value to enter the loop
 	do {
 		randomEvent  = INT_MAX * rand();
-	} while (randomEvent % 997 != 0 || randomEvent < 100)
+	} while (randomEvent % 997 != 0 || randomEvent < 100);
 
 	while (randomEvent >= 100) {
 		// (1) -- sends message to receiver1
@@ -73,7 +73,7 @@ int main() {
 		// generates new random value
 		do {
 			randomEvent  = INT_MAX * rand();
-		} while (randomEvent % 997 != 0 || randomEvent < 100)
+		} while (randomEvent % 997 != 0 || randomEvent < 100);
 	}
 
 	// sends reciever1 last message
