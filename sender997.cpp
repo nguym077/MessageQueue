@@ -42,7 +42,7 @@ int main() {
 	randomEvent  = INT_MAX * rand();
 	while (randomEvent % 997 == 0 && selfTerminate = false) {
 		if (randomEvent < 100) {
-			selfTerminate = true
+			selfTerminate = true;
 		} else {
 			// (1) -- sends message to receiver1
 			msg.mtype = 100;
