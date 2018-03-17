@@ -37,7 +37,7 @@ int main() {
 		} while (randomEvent % 257 != 0);
 
 		// retrieves terminating message if there is one
-		msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
+		// msgrcv(qid, (struct msgbuf *)&msg, size, 400, 0);
 
 		if (msg.greeting[0] == 'T') {
 			status257 = false;
