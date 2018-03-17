@@ -40,7 +40,7 @@ int main() {
 	bool statusReceiver2 = true;
 
 	randomEvent  = INT_MAX * rand();
-	while (randomEvent % 997 == 0 && selfTerminate = false) {
+	while (selfTerminate = false && randomEvent % 997 == 0) {
 		if (randomEvent < 100) {
 			selfTerminate = true;
 		} else {
