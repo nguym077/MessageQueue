@@ -39,38 +39,41 @@ int main() {
 	bool selfTerminate = false;		// used for terminating condition of < 100
 	bool statusReceiver2 = true;
 
-	randomEvent  = INT_MAX * rand();
-	while (selfTerminate = false && randomEvent % 997 == 0) {
-		if (randomEvent < 100) {
-			selfTerminate = true;
-		} else {
-			// (1) -- sends message to receiver1
-			msg.mtype = 100;
-			strcpy(msg.greeting, "997 to first receiver. Value: ");
+	// grabs random value to enter the loop
+	do {
+		randomEvent  = INT_MAX * rand();
+	} while (randomEvent % 997 != 0 || randomEvent < 100)
+
+	while (randomEvent >= 100) {
+		// (1) -- sends message to receiver1
+		msg.mtype = 100;
+		strcpy(msg.greeting, "997 to first receiver. Value: ");
+		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+
+		// (1) acknowledgement
+		msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
+		cout << getpid() << ": " << msg.greeting << endl;
+
+		if (statusReceiver2) {
+			// (2)
+			msg.mtype = 200;
+			strcpy(msg.greeting, "997 to second receiver.");
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
-			// (1) acknowledgement
-			msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
+			// (2) acknowledgement
+			msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
 			cout << getpid() << ": " << msg.greeting << endl;
 
-			if (statusReceiver2) {
-				// (2)
-				msg.mtype = 200;
-				strcpy(msg.greeting, "997 to second receiver.");
-				msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-
-				// (2) acknowledgement
-				msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
-				cout << getpid() << ": " << msg.greeting << endl;
-
-				if (msg.greeting[0] == 'T') {
-					// receiver2 was terminated
-					statusReceiver2 = false;
-				}
+			if (msg.greeting[0] == 'T') {
+				// receiver2 was terminated
+				statusReceiver2 = false;
 			}
-
-			randomEvent  = INT_MAX * rand();
 		}
+
+		// generates new random value
+		do {
+			randomEvent  = INT_MAX * rand();
+		} while (randomEvent % 997 != 0 || randomEvent < 100)
 	}
 
 	// sends reciever1 last message
