@@ -24,13 +24,13 @@ int main() {
     buf msg;
 	int size = sizeof(msg)-sizeof(long);
 
-	cout << "RECEIVER 2" << getpid() << endl;
+	cout << "RECEIVER 2: " << getpid() << endl;
 
 	while (msgCount < 5000) {
 		// receives message from 257 or 997
 		msgrcv(qid, (struct msgbuf *)&msg, size, 200, 0);
 		msgCount++;
-		cout << getpid() << ": message received" << endl;
+		cout << getpid() << " (Receiver2): message received" << endl;
 
 		if (msg.greeting[0] == '9') {
 			// acknowledgement to 997

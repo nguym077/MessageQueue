@@ -10,6 +10,8 @@ The compilation would use the command:
 The 2 files will compile, link & "fuse" to produce a
 single executable. Then, execute your program as usual.
 
+kill -10 <pid>
+
 */
 
 // The sender 251 source code needs to include get_info.h file
@@ -51,7 +53,7 @@ int main() {
 	srand(time(NULL));
 	int randomEvent;
 
-	cout << "SENDER 251" << getpid() << endl;
+	cout << "SENDER 251: " << getpid() << endl;
 	while (true) {
 		// grabs value of random event for message
 		do {
@@ -60,10 +62,9 @@ int main() {
 
 		// (3)
           msg.mtype = 100;
-		strcpy(msg.greeting, "251 to first receiver. Value: ");
-		// strcat(msg.greeting, randomEvent);
+		strcpy(msg.greeting, "251 to first receiver. Value: " + std::to_string(randomEvent));
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-        cout << getpid() << ": send message to first receiver." << endl;
+          cout << getpid() << " (sender251): send message to first receiver." << endl;
 	}
 
     // sends sender 997 terminating message (12)

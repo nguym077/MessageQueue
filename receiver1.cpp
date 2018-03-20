@@ -23,7 +23,7 @@ int main() {
      buf msg;
      int size = sizeof(msg) - sizeof(long);
 
-     cout << "RECEIVER 1" << getpid() << endl;
+     cout << "RECEIVER 1: " << getpid() << endl;
 
      bool bothSending = true;
      int count = 0;
@@ -31,7 +31,7 @@ int main() {
      while (bothSending) {
          // receives message from 251 or 997
          msgrcv(qid, (struct msgbuf *)&msg, size, 100, 0);
-         cout << getpid() << ": message received" << endl;
+         cout << getpid() << " (receiver1): message received" << endl;
 
          if (msg.greeting[0] == '9') {
              // message came from 997, need to send acknowledgement

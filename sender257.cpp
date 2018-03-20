@@ -39,9 +39,9 @@ int main() {
 		} while (randomEvent % 257 != 0);
 
         // (4)
-        strcpy(msg.greeting, "257 to second receiver. Value: ");
+        strcpy(msg.greeting, "257 to second receiver. Value: " + std::to_string(randomEvent));
         // strcat(msg.greeting, randomEvent);
-        cout << getpid() << ": sends message to second receiver" << endl;
+        cout << getpid() << " (sender257): sends message to second receiver" << endl;
         msg.mtype = 200;
         msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 

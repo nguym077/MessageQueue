@@ -47,9 +47,9 @@ int main() {
 	while (randomEvent >= 100) {
 		// (1) -- sends message to receiver1
 		msg.mtype = 100;
-		strcpy(msg.greeting, "997 to first receiver. Value: ");
+		strcpy(msg.greeting, "997 to first receiver. Value: " + std::to_string(randomEvent));
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-		cout << "send message to first receiver." << endl;
+		cout << getpid() << " (sender997): send message to first receiver." << endl;
 
 		// (1) acknowledgement
 		msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
@@ -77,6 +77,8 @@ int main() {
 			randomEvent  = INT_MAX * rand();
 		} while (randomEvent % 997 != 0 || randomEvent < 100);
 	}
+
+	cout << "Sender997 Terminated" << endl;
 
 	// sends reciever1 last message
 	msg.mtype = 100;
