@@ -12,6 +12,7 @@ Description: Sender 257
 - terminates when its reciever stops receiving event notification
 */
 
+#include <cstdio>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -47,9 +48,12 @@ int main() {
 			randomEvent = INT_MAX * rand();
 		} while (randomEvent % 257 != 0);
 
+		char eventString[9];
+		sprintf(eventString, "%d", randomEvent);
+
         // (4)
         strcpy(msg.greeting, "257 to second receiver. Value: " + std::to_string(randomEvent));
-        // strcat(msg.greeting, randomEvent);
+		strcat(msg.greeting, eventString);
         cout << getpid() << " (sender257): sends message to second receiver" << endl;
         msg.mtype = 200;
         msgsnd(qid, (struct msgbuf *)&msg, size, 0);

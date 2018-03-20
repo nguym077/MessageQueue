@@ -13,6 +13,7 @@ Description: Sender 251
 
 */
 
+#include <cstdio>
 #include "get_info.h"
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -55,9 +56,13 @@ int main() {
 			randomEvent = INT_MAX * rand();
 		} while (randomEvent % 251 != 0);
 
+		char eventString[9];
+		sprintf(eventString, "%d", randomEvent);
+
 		// (3)
           msg.mtype = 100;
 		strcpy(msg.greeting, "251 to first receiver. Value: " + std::to_string(randomEvent));
+		strcat(msg.greeting, eventString);
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
           cout << getpid() << " (sender251): send message to first receiver." << endl;
 	}

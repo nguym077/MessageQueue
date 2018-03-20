@@ -14,6 +14,7 @@ Description: Sender 997
 
 */
 
+#include <cstdio>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -55,11 +56,13 @@ int main() {
 	} while (randomEvent % 997 != 0 || randomEvent < 100);
 
 	while (randomEvent >= 100) {
-
+		char eventString[9];
+		sprintf(eventString, "%d", randomEvent);
 		if (statusReceiver1) {
 			// (1) -- sends message to receiver1
 			msg.mtype = 100;
-			strcpy(msg.greeting, "997 to first receiver. Value: " + std::to_string(randomEvent));
+			strcpy(msg.greeting, "997 to first receiver. Value: ");
+			strcat(msg.greeting, eventString);
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 			cout << getpid() << " (sender997): send message to first receiver." << endl;
 
@@ -90,8 +93,10 @@ int main() {
 			}
 		}
 
-		if (statusReceiver1 = false && statusReceiver2 = false) {
-			break;
+		if (statusReceiver1 = false) {
+			if (statusReceiver2 = false) {
+				break;
+			}
 		}
 		
 		// generates new random value
