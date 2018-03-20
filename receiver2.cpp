@@ -30,6 +30,7 @@ int main() {
 		// receives message from 257 or 997
 		msgrcv(qid, (struct msgbuf *)&msg, size, 200, 0);
 		msgCount++;
+		cout << getpid() << ": message received" << endl;
 
 		if (msg.greeting[0] == '9') {
 			// acknowledgement to 997

@@ -63,6 +63,7 @@ int main() {
 		strcpy(msg.greeting, "251 to first receiver. Value: ");
 		// strcat(msg.greeting, randomEvent);
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+        cout << getpid() << ": send message to first receiver." << endl;
 	}
 
     // sends sender 997 terminating message (12)

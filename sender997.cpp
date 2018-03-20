@@ -49,6 +49,7 @@ int main() {
 		msg.mtype = 100;
 		strcpy(msg.greeting, "997 to first receiver. Value: ");
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+		cout << "send message to first receiver." << endl;
 
 		// (1) acknowledgement
 		msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
@@ -59,6 +60,7 @@ int main() {
 			msg.mtype = 200;
 			strcpy(msg.greeting, "997 to second receiver.");
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+			cout << getpid() << ": send message to second receiver." << endl;
 
 			// (2) acknowledgement
 			msgrcv(qid, (struct msgbuf *)&msg, size, 210, 0);
