@@ -5,13 +5,13 @@ g++ sender251.cpp patch64.o -o s251.out
 g++ sender257.cpp -o s257.out
 
 ./s997.out
-./r2.out
-./r1.out
 ./s251.out
 ./s257.out
+./r1.out
+./r2.out
 
 sender997 has to be executed first (created queue)) **
 
-
 "ipcs" = check message queues
 "ipcrm --all=msg" = deletes all messages in queue
+kill -10 <pid>

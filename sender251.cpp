@@ -48,7 +48,7 @@ int main() {
 	srand(time(NULL));
 	int randomEvent;
 
-	cout << "SENDER 251" << getpid() << endl;
+	cout << "SENDER 251: " << getpid() << endl;
 	while (true) {
 		// grabs value of random event for message
 		do {
@@ -57,10 +57,9 @@ int main() {
 
 		// (3)
           msg.mtype = 100;
-		strcpy(msg.greeting, "251 to first receiver. Value: ");
-		// strcat(msg.greeting, randomEvent);
+		strcpy(msg.greeting, "251 to first receiver. Value: " + std::to_string(randomEvent));
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-        cout << getpid() << ": send message to first receiver." << endl;
+          cout << getpid() << " (sender251): send message to first receiver." << endl;
 	}
 
     // sends sender 997 terminating message (12)
