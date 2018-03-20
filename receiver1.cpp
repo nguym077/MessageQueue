@@ -1,6 +1,16 @@
-// First Receiver
-//   - accepts messages from 251 and 997 senders only
-//   - termiantes when both senders are terminated
+/*
+
+Marian Nguyen
+Richard Salmeron
+Project 1
+Files: receiver1.cpp, receiver2.cpp, sender997.cpp,
+       sender251.cpp, sender257.cpp, patch64.o, get_info.h
+
+Description: First Receiver
+- accepts messages from 251 and 997 senders only
+- Termiantes when both senders are terminated
+
+*/
 
 #include <sys/types.h>
 #include <sys/ipc.h>

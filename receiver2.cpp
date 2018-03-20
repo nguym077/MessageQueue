@@ -1,6 +1,16 @@
-// Second Receiver
-//   - accepts messages from 257 and 997 only
-//   - terminates after it has receieved a total of 5000 messages
+/*
+
+Marian Nguyen
+Richard Salmeron
+Project 1
+Files: receiver1.cpp, receiver2.cpp, sender997.cpp,
+       sender251.cpp, sender257.cpp, patch64.o, get_info.h
+
+Description: Second Receiver
+- accepts messages from 257 and 997 only
+- terminates after it has receieved a total of 5000 messages
+
+*/
 
 #include <sys/types.h>
 #include <sys/ipc.h>

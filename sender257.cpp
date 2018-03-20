@@ -1,7 +1,16 @@
-// Sender 257
-//   - Does not accept any acknowledgement message
-//   - only notifies one reciever (receiver2)
-//   - terminates when its reciever stops receiving event notification
+/*
+
+Marian Nguyen
+Richard Salmeron
+Project 1
+Files: receiver1.cpp, receiver2.cpp, sender997.cpp,
+       sender251.cpp, sender257.cpp, patch64.o, get_info.h
+
+Description: Sender 257
+- Does not accept any acknowledgement message
+- only notifies one reciever (receiver2)
+- terminates when its reciever stops receiving event notification
+*/
 
 #include <sys/types.h>
 #include <sys/ipc.h>

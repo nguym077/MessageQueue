@@ -1,8 +1,18 @@
-// Sender 997
-//   - sends each event to all receivers (receiver1 and receiver2)
-//   - requires acknowledgement for each message from
-//        both receivers before continues execution
-//   - terminates when it gets/observes a random number < 100
+/*
+
+Marian Nguyen
+Richard Salmeron
+Project 1
+Files: receiver1.cpp, receiver2.cpp, sender997.cpp,
+       sender251.cpp, sender257.cpp, patch64.o, get_info.h
+
+Description: Sender 997
+- sends each event to all receivers (receiver1 and receiver2)
+- requires acknowledgement for each message from
+  both receivers before continues execution
+- terminates when it gets/observes a random number < 100
+
+*/
 
 #include <sys/types.h>
 #include <sys/ipc.h>
