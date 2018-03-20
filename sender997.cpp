@@ -46,7 +46,7 @@ int main() {
 
 	cout << "SENDER 997: " << getpid() << endl;
 
-	bool selfTerminate = false;		// used for terminating condition of < 100
+	bool statusReceiver1 = true;
 	bool statusReceiver2 = true;
 
 	// grabs random value to enter the loop
@@ -55,15 +55,23 @@ int main() {
 	} while (randomEvent % 997 != 0 || randomEvent < 100);
 
 	while (randomEvent >= 100) {
-		// (1) -- sends message to receiver1
-		msg.mtype = 100;
-		strcpy(msg.greeting, "997 to first receiver. Value: " + std::to_string(randomEvent));
-		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-		cout << getpid() << " (sender997): send message to first receiver." << endl;
 
-		// (1) acknowledgement
-		msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
-		cout << getpid() << ": " << msg.greeting << endl;
+		if (statusReceiver1) {
+			// (1) -- sends message to receiver1
+			msg.mtype = 100;
+			strcpy(msg.greeting, "997 to first receiver. Value: " + std::to_string(randomEvent));
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+			cout << getpid() << " (sender997): send message to first receiver." << endl;
+
+			// (1) acknowledgement
+			msgrcv(qid, (struct msgbuf *)&msg, size, 110, 0);
+			cout << getpid() << ": " << msg.greeting << endl;
+
+			if (msg.greeting[0] == 'T') {
+				// receiver1 was terminated
+				statusReceiver1 = false;
+			}
+		}
 
 		if (statusReceiver2) {
 			// (2)
@@ -82,6 +90,10 @@ int main() {
 			}
 		}
 
+		if (statusReceiver1 = false && statusReceiver2 = false) {
+			break;
+		}
+		
 		// generates new random value
 		do {
 			randomEvent  = INT_MAX * rand();

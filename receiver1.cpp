@@ -8,7 +8,7 @@ Files: receiver1.cpp, receiver2.cpp, sender997.cpp,
 
 Description: First Receiver
 - accepts messages from 251 and 997 senders only
-- Termiantes when both senders are terminated
+- Terminates when both senders are terminated
 
 */
 
@@ -59,9 +59,14 @@ int main() {
          }
      }
 
+    // sends sender 997 last message
+    msg.mtype = 110;
+  	strcpy(msg.greeting, "Terminated (Receiver 1)");
+  	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+
      // sends sender 997 terminating message (10)
  	msg.mtype = 700;
- 	strcpy(msg.greeting, "Terminated (Receiver 2)");
+ 	strcpy(msg.greeting, "Terminated (Receiver 1)");
  	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 
      // receiver 1 terminates
