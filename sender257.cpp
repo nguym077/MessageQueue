@@ -52,7 +52,7 @@ int main() {
 		sprintf(eventString, "%d", randomEvent);
 
         // (4)
-        strcpy(msg.greeting, "257 to second receiver. Value: " + std::to_string(randomEvent));
+        strcpy(msg.greeting, "257 to second receiver. Value: ");
 		strcat(msg.greeting, eventString);
         cout << getpid() << " (sender257): sends message to second receiver" << endl;
         msg.mtype = 200;

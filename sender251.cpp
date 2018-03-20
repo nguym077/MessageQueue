@@ -61,7 +61,7 @@ int main() {
 
 		// (3)
           msg.mtype = 100;
-		strcpy(msg.greeting, "251 to first receiver. Value: " + std::to_string(randomEvent));
+		strcpy(msg.greeting, "251 to first receiver. Value: ");
 		strcat(msg.greeting, eventString);
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
           cout << getpid() << " (sender251): send message to first receiver." << endl;
