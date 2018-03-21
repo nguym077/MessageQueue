@@ -42,7 +42,7 @@ int main() {
 	int size = sizeof(msg)-sizeof(long);
 
 	// last message to r1 through patch
-    msg.mtype = 100;
+     msg.mtype = 100;
 	strcpy(msg.greeting, "Terminate (sender 251 to receiver1)");
 	get_info(qid, (struct msgbuf *)&msg, size, 300);
 
